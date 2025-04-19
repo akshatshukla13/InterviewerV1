@@ -8,12 +8,12 @@ import { BASE_URL } from '../utils/constants';
 const InterviewerLogin = () => {
     const [formData, setFormData] = useState({
         fullName: "Donald Trump",
-        userName: "akshat",
+        userName: "donald123",
         email: "donald@trump.com",
-        password: "akshat123",
+        password: "Donald",
         company: "Trump Organization",
         position: "CEO",
-        role: "Founder"
+        role: "Admin"
     });
 
     const [formErrors, setFormErrors] = useState({});
