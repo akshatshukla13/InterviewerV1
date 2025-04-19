@@ -8,9 +8,9 @@ import { BASE_URL } from '../utils/constants';
 const CandidateLogin = () => {
     const [formData, setFormData] = useState({
         fullName: "Donald Trump",
-        userName: "rishi",
+        userName: "donald123",
         email: "donald@trump.com",
-        password: "rishi123"
+        password: "Donald"
     });
 
     const [formErrors, setFormErrors] = useState({});

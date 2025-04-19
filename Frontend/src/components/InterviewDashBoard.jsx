@@ -26,6 +26,7 @@ function InterviewDashBoard() {
       console.log("Current user data:", response.data)
       if(response.data.user.type == "candidate"){
         setIsCandidate(true)
+        console.log("heyy ",response.data.user._id);
         setCandidateId(response.data.user._id)
       }
       if(response.data.user.type == "interviewer"){

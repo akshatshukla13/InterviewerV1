@@ -74,3 +74,42 @@ export const footerLinks = {
     Support: ['Community', 'Docs', 'Enterprise Sales'],
     Company: ['Blog', 'Careers'],
 };
+
+// export const featureInfo = [
+//   {
+//     icon: <Code className="w-6 h-6 text-white" />,
+//     iconBg: "bg-blue-600",
+//     title: "Real-Time Coding Environment",
+//     description: "Syntax highlighting, auto-completion, and real-time error detection for seamless coding experience."
+//   },
+//   {
+//     icon: <Video className="w-6 h-6 text-white" />,
+//     iconBg: "bg-purple-600",
+//     title: "Video Conferencing",
+//     description: "Built-in WebRTC powered video and audio calls for face-to-face interactions."
+//   },
+//   {
+//     icon: <Shield className="w-6 h-6 text-white" />,
+//     iconBg: "bg-green-600",
+//     title: "Anti-Cheating System",
+//     description: "Advanced tab-switch detection and real-time alerts for interview integrity."
+//   },
+//   {
+//     icon: <FileText className="w-6 h-6 text-white" />,
+//     iconBg: "bg-red-600",
+//     title: "Session Recording",
+//     description: "Complete interview recording including code, video, and chat for later review."
+//   },
+//   {
+//     icon: <Calendar className="w-6 h-6 text-white" />,
+//     iconBg: "bg-yellow-600",
+//     title: "Automated Scheduling",
+//     description: "Email notifications and calendar integration for interview management."
+//   },
+//   {
+//     icon: <MessageSquare className="w-6 h-6 text-white" />,
+//     iconBg: "bg-indigo-600",
+//     title: "Collaborative Tools",
+//     description: "Integrated chat and shared notes for effective communication."
+//   }
+// ];
