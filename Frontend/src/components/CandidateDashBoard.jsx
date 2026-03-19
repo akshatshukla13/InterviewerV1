@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendarAlt, FaClock, FaVideo, FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
 import { BASE_URL } from '@/utils/constants';
+import AppShell from '@/components/layout/AppShell';
+import AppCard from '@/components/ui/AppCard';
+import AppButton from '@/components/ui/AppButton';
+import { dashboardSidebarItems } from '@/design/tokens';
 
 function CandidateDashBoard({ candidateID }) {
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const joinInterview = (interviewID) => {
@@ -24,8 +28,7 @@ function CandidateDashBoard({ candidateID }) {
           );
           setInterviews(response.data.interviews || []);
           setLoading(false);
-        } catch (err) {
-          // setError('Failed to fetch interviews. Please try again later.');
+        } catch {
           setLoading(false);
         }
       }
@@ -40,36 +43,26 @@ function CandidateDashBoard({ candidateID }) {
     </div>
   );
   
-  if (error) return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md">
-        <strong className="font-bold">Error! </strong>
-        <span className="block sm:inline">{error}</span>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl p-4 font-bold text-gray-800 mb-6">Candidate Interviews</h1>
-        
+    <AppShell
+      title="Candidate Dashboard"
+      subtitle="Track your interview schedule and join active sessions quickly."
+      sidebarItems={dashboardSidebarItems.candidate}
+    >
+      <AppCard title="Candidate Interviews" description="Upcoming and completed interview sessions">
         {interviews.length === 0 ? (
-          <div className="bg-white p-8 rounded-lg shadow text-center">
-            <p className="text-gray-600">No interviews scheduled yet.</p>
-          </div>
+          <p className="py-8 text-center text-slate-600">No interviews scheduled yet.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             {interviews.map((interview) => {
               const interviewDate = new Date(interview.scheduledAt);
               const isCompleted = interview.status === 'completed';
-              const isUpcoming = !isCompleted && interviewDate > new Date();
 
               return (
-                <div 
+                <div
                   key={interview._id} 
-                  className={`bg-white rounded-lg shadow-md overflow-hidden border ${
-                    isCompleted ? 'border-green-200' : 'border-blue-200'
+                  className={`rounded-xl border p-5 ${
+                    isCompleted ? 'border-green-200 bg-green-50/40' : 'border-blue-200 bg-white'
                   }`}
                 >
                   <div className="p-5">
@@ -106,22 +99,22 @@ function CandidateDashBoard({ candidateID }) {
                       </div>
                     </div>
                     
-                    {!isCompleted && (
-                      <button
+                    {!isCompleted ? (
+                      <AppButton
                         onClick={() => joinInterview(interview._id)}
-                        className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                        className="w-full"
                       >
                         <FaVideo className="mr-2" /> Join Interview
-                      </button>
-                    )}
+                      </AppButton>
+                    ) : null}
                   </div>
                 </div>
               );
             })}
           </div>
         )}
-      </div>
-    </div>
+      </AppCard>
+    </AppShell>
   );
 }
 

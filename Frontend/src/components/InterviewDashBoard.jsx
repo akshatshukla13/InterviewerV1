@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
 import CandidateDashBoard from './CandidateDashBoard';
 import InterviewerDashBoard from './InterviewerDashBoard';
 import axios from 'axios';
@@ -31,15 +30,10 @@ function InterviewDashBoard() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white p-6 text-white">
-      <div className="max-w-full mx-auto">
-        {/* Content */}
-        <div className="h-full">
-          {isInterviewer && <InterviewerDashBoard interviewerId={interviewerId} />}
-          {isCandidate && <CandidateDashBoard candidateID={candidateID} />}
-        </div>
-      </div>
-    </div>
+    <>
+      {isInterviewer && <InterviewerDashBoard interviewerId={interviewerId} />}
+      {isCandidate && <CandidateDashBoard candidateID={candidateID} />}
+    </>
   )
 }
 

@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { addUser } from '../features/userSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/constants';
+import AppCard from '@/components/ui/AppCard';
+import AppField from '@/components/ui/AppField';
+import AppButton from '@/components/ui/AppButton';
+import { designTokens } from '@/design/tokens';
 
 const InterviewerLogin = () => {
   const [formData, setFormData] = useState({
@@ -20,27 +24,21 @@ const InterviewerLogin = () => {
   const [error, setError] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [alreadyLogin, setAlreadyLogin] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (alreadyLogin) {
-      navigate('/interview-dashboard', { replace: true });
-    }
-
     axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
       withCredentials: true
     })
       .then(response => {
         if (response.data.user?.type === "interviewer") {
-          setAlreadyLogin(true);
           navigate('/interview-dashboard', { replace: true });
         }
       })
       .catch(() => { });
-  }, []);
+  }, [navigate]);
 
   const validate = () => {
     const errors = {};
@@ -90,62 +88,101 @@ const InterviewerLogin = () => {
     }
   };
 
-  const renderInput = (name, placeholder, type = "text") => (
-    <div className="mb-4">
-      <label className="block w-full">
-        <input
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          value={formData[name]}
-          onChange={handleChange}
-          className={`w-full px-4 py-3 rounded-xl border ${
-            formErrors[name] ? 'border-red-500' : 'border-gray-200'
-          } bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
-        />
-      </label>
-      {formErrors[name] && (
-        <p className="mt-1 text-sm text-red-500">{formErrors[name]}</p>
-      )}
-    </div>
-  );
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="bg-white p-8 rounded-2xl shadow-md">
-          <h2 className="text-center text-3xl font-bold text-gray-900 mb-6">
-            {isLoginForm ? "Login" : "Sign Up"} to Interview Platform
-          </h2>
+    <div className="min-h-screen bg-slate-50 py-12">
+      <div className={designTokens.container}>
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 lg:grid-cols-[1.2fr_1fr]">
+          <div className="rounded-2xl border border-slate-200 bg-white p-10 shadow-sm">
+            <h1 className="text-4xl font-semibold tracking-tight text-slate-900">Interviewer Workspace</h1>
+            <p className="mt-4 text-slate-600">
+              Conduct structured interviews from one platform: schedule, evaluate, and decide faster.
+            </p>
+            <ul className="mt-8 space-y-3 text-sm text-slate-700">
+              <li>• Unified scheduling, evaluation forms, and live session controls</li>
+              <li>• Clear desktop layout with consistent information hierarchy</li>
+              <li>• Reduced context switching for better interviewer focus</li>
+            </ul>
+          </div>
 
+          <AppCard
+            title={`${isLoginForm ? "Login" : "Sign Up"} to Interview Platform`}
+            description="Use your interviewer account credentials."
+          >
+            <div className="space-y-4">
           {!isLoginForm && (
             <>
-              {renderInput("fullName", "Full Name")}
-              {renderInput("email", "Email")}
-              {renderInput("company", "Company")}
-              {renderInput("position", "Position")}
-              {renderInput("role", "Role")}
+              <AppField
+                label="Full Name"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                error={formErrors.fullName}
+              />
+              <AppField
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                error={formErrors.email}
+              />
+              <AppField
+                label="Company"
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
+                error={formErrors.company}
+              />
+              <AppField
+                label="Position"
+                name="position"
+                value={formData.position}
+                onChange={handleChange}
+                error={formErrors.position}
+              />
+              <AppField
+                label="Role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                error={formErrors.role}
+              />
             </>
           )}
 
-          {renderInput("userName", "User Name")}
-          {renderInput("password", "Password", "password")}
+          <AppField
+            label="User Name"
+            name="userName"
+            value={formData.userName}
+            onChange={handleChange}
+            error={formErrors.userName}
+            required
+          />
+          <AppField
+            label="Password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            error={formErrors.password}
+            required
+          />
 
           {error && (
-            <p className="text-center p-3 rounded-lg bg-red-50 text-red-500 mb-4">
+            <p className="rounded-lg bg-red-50 p-3 text-center text-red-500">
               {typeof error === "string" ? error : JSON.stringify(error)}
             </p>
           )}
 
-          <button
+          <AppButton
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-70 mb-4"
+            className="w-full"
           >
             {isSubmitting
               ? (isLoginForm ? "Logging in..." : "Signing up...")
               : (isLoginForm ? "Login" : "Sign Up")}
-          </button>
+          </AppButton>
           
           <p className="text-center mt-3">
             <span
@@ -154,11 +191,13 @@ const InterviewerLogin = () => {
                 setError("");
                 setFormErrors({});
               }}
-              className="text-blue-600 hover:text-blue-800 cursor-pointer font-medium"
+              className="cursor-pointer font-medium text-blue-600 hover:text-blue-800"
             >
               {isLoginForm ? "New User? Sign up here" : "Existing User? Login here"}
             </span>
           </p>
+            </div>
+          </AppCard>
         </div>
       </div>
     </div>

@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/constants';
-import { FiCalendar, FiClock, FiMail, FiUser, FiX, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import { FiX, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import AppShell from '@/components/layout/AppShell';
+import AppCard from '@/components/ui/AppCard';
+import AppField from '@/components/ui/AppField';
+import AppButton from '@/components/ui/AppButton';
+import { dashboardSidebarItems } from '@/design/tokens';
 
 function ScheduleInterview() {
     const [interviewerName, setInterviewerName] = useState('');
@@ -82,7 +87,8 @@ function ScheduleInterview() {
             } else {
                 setModal({ show: true, success: false, message: result.message || 'Failed to schedule interview.' });
             }
-        } catch (err) {
+        } catch (error) {
+            console.error('Scheduling request failed:', error);
             setModal({ show: true, success: false, message: 'Network error. Please try again.' });
         } finally {
             setLoadingSubmit(false);
@@ -98,19 +104,16 @@ function ScheduleInterview() {
         }
     };
 
-    const renderFormField = ({ label, name, type = "text", readOnly = false, value, options = null }) => (
-        <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-900 mb-1" htmlFor={name}>
-                {label}
-            </label>
-            {options ? (
+    const renderFormField = ({ label, name, type = "text", readOnly = false, value, options = null }) =>
+        options ? (
+            <AppField label={label} name={name}>
                 <select
                     id={name}
                     name={name}
                     value={value}
                     onChange={handleChange}
                     disabled={readOnly}
-                    className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-800"
+                    className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     required
                 >
                     <option value="">Select {label}</option>
@@ -120,38 +123,35 @@ function ScheduleInterview() {
                         </option>
                     ))}
                 </select>
-            ) : (
-                <input
-                    type={type}
-                    id={name}
-                    name={name}
-                    value={value}
-                    onChange={handleChange}
-                    readOnly={readOnly}
-                    className={`appearance-none block w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${readOnly ? 'bg-gray-50 text-gray-500' : 'bg-white text-gray-800'}`}
-                    min={type === "number" ? 5 : undefined}
-                    required
-                />
-            )}
-        </div>
-    );
+            </AppField>
+        ) : (
+            <AppField
+                label={label}
+                name={name}
+                type={type}
+                value={value}
+                onChange={handleChange}
+                readOnly={readOnly}
+                min={type === "number" ? 5 : undefined}
+                required
+            />
+        );
 
     return (
-        <div className=" min-h-screen bg-gray-50 py-12  flex items-center justify-center  px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mx-auto">
-                <div className="bg-white rounded-2xl shadow-md p-8">
-                    <div className="flex items-center justify-between mb-8">
-                        <h1 className="text-2xl font-bold text-gray-900">Schedule New Interview</h1>
-                        <button
-                            onClick={() => navigate('/interview-dashboard')}
-                            className="text-gray-500 hover:text-gray-700 focus:outline-none transition-colors"
-                        >
-                            <FiX className="h-6 w-6" />
-                        </button>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <AppShell
+            title="Schedule Interview"
+            subtitle="Create a new interview with consistent, form-first desktop UX."
+            sidebarItems={dashboardSidebarItems.interviewer}
+            topActions={
+                <AppButton variant="outline" onClick={() => navigate('/interview-dashboard')}>
+                    <FiX className="mr-2 h-4 w-4" />
+                    Close
+                </AppButton>
+            }
+        >
+            <AppCard>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
                             {renderFormField({
                                 label: "Interviewer Username",
                                 name: "interviewerUserName",
@@ -207,7 +207,7 @@ function ScheduleInterview() {
                                         name="evaluationFormId"
                                         value={formData.evaluationFormId}
                                         onChange={handleChange}
-                                        className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-800"
+                                        className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                                         required
                                     >
                                         <option value="">Select an evaluation form</option>
@@ -242,11 +242,11 @@ function ScheduleInterview() {
                             })}
                         </div>
 
-                        <div className="pt-4">
-                            <button
+                    <div className="pt-4">
+                            <AppButton
                                 type="submit"
                                 disabled={loadingSubmit}
-                                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-70"
+                                className="w-full"
                             >
                                 {loadingSubmit ? (
                                     <span className="flex items-center">
@@ -259,11 +259,10 @@ function ScheduleInterview() {
                                 ) : (
                                     'Schedule Interview'
                                 )}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                            </AppButton>
+                    </div>
+                </form>
+            </AppCard>
 
             {modal.show && (
                 <div className="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center">
@@ -287,18 +286,18 @@ function ScheduleInterview() {
                             </div>
                         </div>
                         <div className="bg-gray-50 px-6 py-3">
-                            <button
+                            <AppButton
                                 type="button"
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                                className="w-full"
                                 onClick={handleModalClose}
                             >
                                 OK
-                            </button>
+                            </AppButton>
                         </div>
                     </div>
                 </div>
             )}
-        </div>
+        </AppShell>
     );
 }
 
