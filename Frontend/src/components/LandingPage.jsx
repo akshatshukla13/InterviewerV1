@@ -1,12 +1,11 @@
-'use client'
 import { useState } from "react";
 import { X } from "lucide-react";
-import { SplineScene } from "@/components/ui/splite";
 import NavBar from "@/components/NavBar";
-import Feature from "./Feature";
 import Footer from "./Footer";
-import { CheckCircle, ArrowRight, Zap, ChevronRight, Calendar, Video, ClipboardCheck } from 'lucide-react';
+import { CheckCircle, ArrowRight, Zap, Calendar, Video, ClipboardCheck } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
+import AppButton from "@/components/ui/AppButton";
+import { designTokens } from "@/design/tokens";
 
 export function LandingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +44,7 @@ export function LandingPage() {
 
       {/* Hero Section */}
       <section className="w-full min-h-screen relative flex items-center justify-center z-10">
-        <div className="container mx-auto px-6 text-center max-w-3xl">
+        <div className={`${designTokens.container} text-center max-w-4xl`}>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-b from-blue-800 to-indigo-600">
             Conduct Better Technical Interviews in One Place
           </h1>
@@ -55,15 +54,16 @@ export function LandingPage() {
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
 
             <div className="flex gap-4 p-4">
-              <button onClick={() => { window.location.href = "/interviewer-signup" }} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105">
+              <AppButton onClick={() => { window.location.href = "/interviewer-signup" }} className="px-8 py-3">
                 Enter as Interviewer
-              </button>
-              <button
+              </AppButton>
+              <AppButton
                 onClick={() => setIsModalOpen(true)}
-                className="border border-neutral-400 text-neutral-700 hover:border-blue-600 hover:text-blue-700 font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
+                variant="outline"
+                className="px-8 py-3"
               >
                 Watch Demo Video
-              </button>
+              </AppButton>
             </div>
 
             {/* Modal */}
@@ -220,9 +220,9 @@ export function LandingPage() {
             <h2 className="text-3xl sm:text-4xl font-bold text-blue-900 mb-3 sm:mb-4">
               Trusted by <span className="text-blue-600">Engineering Teams</span>
             </h2>
-            <p className="p-4 text-lg text-neutral-700">
-              Don't just take our word for it. Here's what our users say.
-            </p>
+              <p className="p-4 text-lg text-neutral-700">
+               Don&apos;t just take our word for it. Here&apos;s what our users say.
+              </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
@@ -252,7 +252,7 @@ export function LandingPage() {
                   ))}
                 </div>
                 <blockquote className="text-lg text-slate-800 mb-5 sm:mb-6">
-                  "{testimonial.quote}"
+                  &ldquo;{testimonial.quote}&rdquo;
                 </blockquote>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">
@@ -276,7 +276,7 @@ export function LandingPage() {
 
         
       {/* Animation Style */}
-      <style jsx>{`
+      <style>{`
         @keyframes meteor {
           0% {
             transform: translate(0, 0) scale(1);

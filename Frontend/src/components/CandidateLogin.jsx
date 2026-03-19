@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { addUser } from '../features/userSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/constants';
+import AppCard from '@/components/ui/AppCard';
+import AppField from '@/components/ui/AppField';
+import AppButton from '@/components/ui/AppButton';
+import { designTokens } from '@/design/tokens';
 
 const CandidateLogin = () => {
     const [formData, setFormData] = useState({
@@ -30,7 +34,7 @@ const CandidateLogin = () => {
                 }
             })
             .catch(() => { });
-    }, []);
+    }, [alreadyLogin, navigate]);
 
     const validate = () => {
         const { userName, password } = formData;
@@ -63,49 +67,51 @@ const CandidateLogin = () => {
         }
     };
 
-    const renderInput = (name, placeholder, type = "text") => (
-        <div className="w-full mb-4">
-            <label className="flex flex-col w-full">
-                {/* <span className="text-sm text-slate-600 mb-1">{placeholder}</span> */}
-                <input
-                    type={type}
-                    name={name}
-                    placeholder={placeholder}
-                    value={formData[name]}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-200 bg-white text-slate-800"
-                />
-            </label>
-            {formErrors[name] && (
-                <p className="text-red-500 text-sm mt-1 px-1">{formErrors[name]}</p>
-            )}
-        </div>
-    );
-
     return (
-        <div className="min-h-screen bg-[#F9FAFB] flex items-center justify-center px-4">
-            <div className="bg-white border border-[#E5E7EB] w-full max-w-md rounded-2xl shadow-lg p-8 transition-all duration-300">
-                <div className="flex flex-col items-center text-center space-y-6">
-                    <h2 className="text-3xl font-bold text-[#111827]">Candidate Login</h2>
-                    <p className="text-[#6B7280] text-sm">Access your interview dashboard</p>
-                
-                    <div className="w-full space-y-4 pt-4">
-                        {renderInput("userName", "User Name")}
-                        {renderInput("password", "Password", "password")}
-                    </div>
-            
-                    {error && (
-                        <p className="text-[#EF4444] text-sm w-full text-left">
-                            {typeof error === "string" ? error : JSON.stringify(error)}
+        <div className="min-h-screen bg-slate-50 py-12">
+            <div className={designTokens.container}>
+                <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-[1.1fr_1fr]">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-10 shadow-sm">
+                        <h1 className="text-4xl font-semibold tracking-tight text-slate-900">Candidate Portal</h1>
+                        <p className="mt-4 text-slate-600">
+                            Join interviews faster with a focused dashboard designed for desktop productivity.
                         </p>
-                    )}
-            
-                    <button
-                        className="w-full py-3 px-4 bg-[#2563EB] hover:bg-[#1E40AF] active:scale-98 transition-all duration-200 rounded-lg font-medium text-white tracking-wide shadow-sm"
-                        onClick={handleSubmit}
-                    >
-                        Login
-                    </button>
+                        <ul className="mt-8 space-y-3 text-sm text-slate-700">
+                            <li>• View upcoming interviews in a structured list</li>
+                            <li>• Join live sessions with a single action</li>
+                            <li>• Keep track of your interview status and timeline</li>
+                        </ul>
+                    </div>
+
+                    <AppCard title="Candidate Login" description="Access your interview dashboard.">
+                        <div className="space-y-4">
+                            <AppField
+                                label="User Name"
+                                name="userName"
+                                value={formData.userName}
+                                onChange={handleChange}
+                                error={formErrors.userName}
+                                required
+                            />
+                            <AppField
+                                label="Password"
+                                name="password"
+                                type="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                error={formErrors.password}
+                                required
+                            />
+                            {error ? (
+                                <p className="text-sm text-red-600">
+                                    {typeof error === "string" ? error : JSON.stringify(error)}
+                                </p>
+                            ) : null}
+                            <AppButton className="w-full" onClick={handleSubmit}>
+                                Login
+                            </AppButton>
+                        </div>
+                    </AppCard>
                 </div>
             </div>
         </div>
