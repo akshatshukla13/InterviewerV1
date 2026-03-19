@@ -87,7 +87,8 @@ function ScheduleInterview() {
             } else {
                 setModal({ show: true, success: false, message: result.message || 'Failed to schedule interview.' });
             }
-        } catch {
+        } catch (error) {
+            console.error('Scheduling request failed:', error);
             setModal({ show: true, success: false, message: 'Network error. Please try again.' });
         } finally {
             setLoadingSubmit(false);

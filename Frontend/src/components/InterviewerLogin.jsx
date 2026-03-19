@@ -24,27 +24,21 @@ const InterviewerLogin = () => {
   const [error, setError] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [alreadyLogin, setAlreadyLogin] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (alreadyLogin) {
-      navigate('/interview-dashboard', { replace: true });
-    }
-
     axios.post(`${BASE_URL}/getCurrentUser/`, {}, {
       withCredentials: true
     })
       .then(response => {
         if (response.data.user?.type === "interviewer") {
-          setAlreadyLogin(true);
           navigate('/interview-dashboard', { replace: true });
         }
       })
       .catch(() => { });
-  }, [alreadyLogin, navigate]);
+  }, [navigate]);
 
   const validate = () => {
     const errors = {};
